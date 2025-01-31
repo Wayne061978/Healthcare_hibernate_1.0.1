@@ -1,17 +1,16 @@
 package healthcare.model;
 
 import jakarta.persistence.*;
-
-
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "Doctors")
+@Table(name = "doctors")
 public class Doctor {
 
-    // Getters and Setters
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DoctorId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Assumes auto-increment strategy
+    @Column(name = "doctorId")
     private int doctorId;
 
     @Column(name = "FirstName", nullable = false)
@@ -20,20 +19,64 @@ public class Doctor {
     @Column(name = "LastName", nullable = false)
     private String lastName;
 
-    @Column(name = "Specialty", nullable = false)
-    private String specialty;
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Patient> patients = new HashSet<>();
 
-    @Column(name = "Email", unique = true, nullable = false)
-    private String email;
+    // Default constructor (needed by Hibernate)
+    public Doctor() {
+    }
 
-    @Override
-    public String toString() {
-        return "Doctor{" +
-                "doctorId=" + doctorId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", specialty='" + specialty + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    // Getters and setters
+    public int getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Set<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(Set<Patient> patients) {
+        this.patients = patients;
+    }
+
+    // Utility methods for managing patients
+    public void addPatient(Patient patient) {
+        patients.add(patient);
+        patient.setDoctor(this);
+    }
+
+    public void removePatient(Patient patient) {
+        patients.remove(patient);
+        patient.setDoctor(null);
+    }
+
+    public void setSpecialty(String s) {
+    }
+
+    public void setEmail(String s) {
+    }
+
+    public String getName() {
+        return "Name";
     }
 }

@@ -2,6 +2,7 @@ package healthcare.service;
 
 
 import healthcare.model.Appointment;
+import healthcare.model.Patient;
 import healthcare.repository.AppointmentRepository;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     public AppointmentService(AppointmentRepository appointmentRepository) {
         this.appointmentRepository = appointmentRepository;
+    }
+    public void createAppointment(Appointment appointment) {
+        appointmentRepository.createAppointment(appointment);
     }
     // Get all appointments
     public List<Appointment> getAllAppointments() {

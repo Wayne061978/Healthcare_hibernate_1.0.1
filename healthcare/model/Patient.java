@@ -26,6 +26,9 @@ public class Patient {
     @Column(name = "PhoneNumber")
     private String phoneNumber;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 
     public Patient() {
     }
@@ -98,5 +101,12 @@ public class Patient {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
+    }
+
+    public void setDoctor(Doctor doctor) {
+    }
+
+    public String getName() {
+        return "Name";
     }
 }

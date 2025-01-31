@@ -1,35 +1,61 @@
 package healthcare.model;
 
+
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "Appointments")
+@Table(name = "appointments")
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AppointmentId")
+    @Column(name = "appointmentId")
     private int appointmentId;
 
-    @Column(name = "PatientId", nullable = false)
-    private int patientId;
+    @Column(name = "appointmentDate", nullable = false)
+    private LocalDate appointmentDate;
 
-    @Column(name = "DoctorId", nullable = false)
-    private int doctorId;
-
-    @Column(name = "AppointmentDate", nullable = false)
-    private String appointmentDate;
-
-    @Column(name = "Notes")
+    @Column(name = "notes", length = 500)
     private String notes;
 
-    // Getters and Setters
+    @Column(name = "patientId", insertable = false, updatable = false) // Prevent insert/update conflicts
+    private int patientId;
+
+    @Column(name = "doctorId", insertable = false, updatable = false) // Prevent insert/update conflicts
+    private int doctorId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patientId", referencedColumnName = "patientId", nullable = false)
+    private Patient patient;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctorId", referencedColumnName = "doctorId", nullable = false)
+    private Doctor doctor;
+
+    // Getters and setters
     public int getAppointmentId() {
         return appointmentId;
     }
 
     public void setAppointmentId(int appointmentId) {
         this.appointmentId = appointmentId;
+    }
+
+    public LocalDate getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(LocalDate appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public int getPatientId() {
@@ -48,20 +74,30 @@ public class Appointment {
         this.doctorId = doctorId;
     }
 
-    public String getAppointmentDate() {
-        return appointmentDate;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setAppointmentDate(String appointmentDate) {
-        this.appointmentDate = appointmentDate;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
-    public String getNotes() {
-        return notes;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "appointmentId=" + appointmentId +
+                ", appointmentDate=" + appointmentDate +
+                ", notes='" + notes + '\'' +
+                ", patientId=" + patientId +
+                ", doctorId=" + doctorId +
+                '}';
     }
 }
-
